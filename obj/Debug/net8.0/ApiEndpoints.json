@@ -1,0 +1,90 @@
+[
+  {
+    "ContainingType": "Practiced_E_commerce.Controllers.BrandsController",
+    "Method": "GetAllBrands",
+    "RelativePath": "api/Brands/AllBrands",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Practiced_E_commerce.Controllers.CategoryController",
+    "Method": "GetAllCategory",
+    "RelativePath": "api/Category/AllCategory",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Practiced_E_commerce.Controllers.ProductController",
+    "Method": "GetAllProducts",
+    "RelativePath": "api/Product/AllProducts",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Practiced_E_commerce.Controllers.ProductController",
+    "Method": "CreateProduct",
+    "RelativePath": "api/Product/CreateProduct",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "productcreatedto",
+        "Type": "Practiced_E_commerce.Dto.Products.ProductCreateDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Practiced_E_commerce.Controllers.RegisterController",
+    "Method": "GetAllUsers",
+    "RelativePath": "api/Register/AllUsers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Practiced_E_commerce.Controllers.RegisterController",
+    "Method": "LoginUser",
+    "RelativePath": "api/Register/LoginUser",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "logindto",
+        "Type": "Practiced_E_commerce.Dto.Login.LoginUserDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Practiced_E_commerce.Controllers.RegisterController",
+    "Method": "RegisterUser",
+    "RelativePath": "api/Register/RegisterUser",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "registerdto",
+        "Type": "Practiced_E_commerce.Dto.Register.RegisterDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
