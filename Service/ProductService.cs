@@ -13,29 +13,14 @@ namespace Practiced_E_commerce.Service
             _productrepo = productrepo;
         }
 
-
-        public async Task<ResponceModel> GetAllProducts()
+        public async Task<ResponceModel> Createproduct(CreateProductRequestDto createproductdto)
         {
-            var result = await _productrepo.GetAllProduct();
+            var result = await _productrepo.Createproduct(createproductdto);
 
             return new ResponceModel
             {
                 StatusCode = 200,
-                Message = "All Product List",
-                Data = result
-            };
-        }
-
-
-
-        public async Task<ResponceModel> CreateProduct(ProductCreateDto productcreatedto)
-        {
-            var result = await _productrepo.CreateProduct(productcreatedto);
-
-            return new ResponceModel
-            {
-                StatusCode = 200,
-                Message = "Product Created Successfully !",
+                Message = "Product created successfully !",
                 Data = result
             };
         }

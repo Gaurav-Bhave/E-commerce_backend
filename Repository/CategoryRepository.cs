@@ -14,10 +14,11 @@ namespace Practiced_E_commerce.Repository
             _db = db;
         }
 
+    
 
         public async Task<List<CategoryDto>> GetAllCatergory()
         {
-            var sql = "Select * from Categories";
+            var sql = "Select * from Categories ORDER BY Id ASC";
             var result = await _db.QueryAsync<Categories>(sql);
 
             return result.Select(x => new CategoryDto
@@ -25,6 +26,17 @@ namespace Practiced_E_commerce.Repository
                 Id = x.Id,
                 Name = x.Name,
             }).ToList();
+        }
+
+
+        public async Task<CreatecategoryrequestDto> CreateCategory(CreatecategoryrequestDto createcategorydto)
+        {
+            var parameter = new DynamicParameters();
+            parameter.Add("@Categoryname", createcategorydto.categoryName);
+
+            var result = await _db.ExecuteAsync("CreateCategory", parameter, commandType: CommandType.StoredProcedure);
+
+            return createcategorydto;
         }
     }
 }

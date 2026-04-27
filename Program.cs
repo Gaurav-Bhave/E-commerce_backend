@@ -137,7 +137,9 @@ if (app.Environment.IsDevelopment())
 // Global exception
 app.UseMiddleware<ExceptionMiddleware>();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
+
+app.UseStaticFiles();
 
 // 🟢 CORS middleware (VERY IMPORTANT POSITION)
 app.UseCors("AllowFrontend");

@@ -5,5 +5,7 @@ namespace Practiced_E_commerce.RepositoryInterface
     public interface IBrandsRepoInterface
     {
         Task<List<BrandsDto>> GetAllBrands();
+
+        Task<Createbrandrequest> CreateBrand(Createbrandrequest mycreatebrandrequrt);
     }
 }

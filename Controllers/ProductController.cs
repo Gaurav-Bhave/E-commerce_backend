@@ -16,21 +16,11 @@ namespace Practiced_E_commerce.Controllers
             _productservice = productservice;
         }
 
-
-        [HttpGet("AllProducts")]
-        [Authorize (Roles = "Admin")]
-        public async Task<IActionResult> GetAllProducts()
-        { 
-            var result = await _productservice.GetAllProducts();
-            return StatusCode(result.StatusCode, result);
-        }
-
-
         [HttpPost("CreateProduct")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> CreateProduct(ProductCreateDto productcreatedto)
+        public async Task<IActionResult> CreateProduct([FromForm] CreateProductRequestDto createproductdto)
         { 
-            var result = await _productservice.CreateProduct(productcreatedto);
+            var result = await _productservice.Createproduct(createproductdto);
             return StatusCode(result.StatusCode, result);
         }
 

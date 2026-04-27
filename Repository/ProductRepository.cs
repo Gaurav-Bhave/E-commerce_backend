@@ -1,8 +1,6 @@
 ﻿using System.Data;
-using System.Xml.Linq;
 using Dapper;
 using Practiced_E_commerce.Dto.Products;
-using Practiced_E_commerce.Models;
 using Practiced_E_commerce.RepositoryInterface;
 
 namespace Practiced_E_commerce.Repository
@@ -10,56 +8,112 @@ namespace Practiced_E_commerce.Repository
     public class ProductRepository : IProductRepoInterface
     {
         private readonly IDbConnection _db;
+
         public ProductRepository(IDbConnection db)
         {
             _db = db;
         }
 
-
-        public async Task<List<ProductListResponceDto>> GetAllProduct()
+        public async Task<CreateProductResponseDto> Createproduct(CreateProductRequestDto createproductdto)
         {
-            var sql = @"select p.* , b.Name as BrandName, c.Name as CategoryName from Products p 
-                        inner join 
-                        Categories c
-                        on p.CategoryId = c.Id 
-                        inner join
-                        Brands b 
-                        on p.BrandId = b.Id ";
+            try
+            {
+                var param = new DynamicParameters();
+                string sku = Generatesku(createproductdto.ProductName);
 
-            var result = await _db.QueryAsync<ProductListResponceDto>(sql);
+                param.Add("@Name", createproductdto.ProductName);
+                param.Add("@Description", createproductdto.Description);
+                param.Add("@Price", createproductdto.Price);
+                param.Add("@CategoryId", createproductdto.CategoryId);
+                param.Add("@BrandId", createproductdto.BrandId);
+                param.Add("@StockQuantity", createproductdto.StockQuantity);
+                param.Add("@Sku", sku);
 
-            return result.ToList();
+
+
+                // ✅ Step 1: IFormFile save karo aur path lo
+                var imageUrls = new List<string>();
+
+                foreach (var img in createproductdto.ProductImages)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(img.FileName);
+                    string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+
+                    // ✅ Folder nahi hai toh banao
+                    if (!Directory.Exists(folderPath))
+                        Directory.CreateDirectory(folderPath);
+
+                    string filePath = Path.Combine(folderPath, fileName);
+
+                    // ✅ File disk pe save karo
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await img.CopyToAsync(stream);
+                    }
+
+                    imageUrls.Add("/images/" + fileName);
+                }
+
+                // ✅ Step 2: TVP mein string paths daalo
+                var table = new DataTable();
+                table.Columns.Add("ImageUrl", typeof(string));
+
+                foreach (var url in imageUrls)
+                {
+                    table.Rows.Add(url);
+                }
+
+                param.Add("@Images", table.AsTableValuedParameter("ProductImageType"));
+
+                // ✅ Step 3: SP call karo
+                int productId = await _db.QuerySingleAsync<int>(
+                    "sp_Createproductswithimages",
+                    param,
+                    commandType: CommandType.StoredProcedure
+                );
+
+                return new CreateProductResponseDto
+                {
+                    ProductId = productId,
+                    Name = createproductdto.ProductName,
+                    Description = createproductdto.Description,
+                    Price = createproductdto.Price,
+                    CategoryId = createproductdto.CategoryId,
+                    BrandId = createproductdto.BrandId,
+                    StockQuantity = createproductdto.StockQuantity,
+                    SKU = sku,
+                    ImageUrls = imageUrls  
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Create product failed: " + ex.Message);
+            }
+        }
+
+        private string Generatesku(string name)
+        {
+            var random = new Random();
+            int number = random.Next(1000, 9999);
+
+            string part = name.Length >= 3
+                ? name.Substring(0, 3).ToUpper()
+                : name.ToUpper();
+
+            return $"{part}-{number}";
         }
 
 
-        public async Task<ProductCreateDto> CreateProduct(ProductCreateDto productcreatedto)
+
+        //getall products with pagination
+        public async Task<Getall_productswithpagination_response_dto> GetAllProducts(Getall_productwithpagination_request_Dto getallproductdto)
         {
-            var sql = @"Insert into Products (Name , Description , Price , CategoryId , BrandId , StockQuantity , SKU) 
-                        output inserted.* values (@name , @description , @price , @categoryid , @brandid , @StokeQuantity , @sku)";
+            var paramter = new DynamicParameters();
 
-            var result = await _db.QueryFirstAsync<Products>(sql,
-                            new
-                            {
-                                name = productcreatedto.Name,
-                                description = productcreatedto.Description,
-                                price = productcreatedto.Price,
-                                categoryid = productcreatedto.CategoryId,
-                                brandid = productcreatedto.BrandId,
-                                StokeQuantity = productcreatedto.StockQuantity,
-                                sku = productcreatedto.SKU,
-                            });
+            paramter.Add("@Page", getallproductdto.page);
+            paramter.Add("@PageSize", getallproductdto.pagesize);
 
-            return new ProductCreateDto
-            {
-                Name = result.Name,
-                Description = result.Description,
-                Price = result.Price,
-                CategoryId = result.CategoryId,
-                BrandId = result.BrandId,
-                StockQuantity = result.StockQuantity,
-                SKU = result.SKU
-            };
-
+            
         }
     }
 }

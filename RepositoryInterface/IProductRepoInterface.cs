@@ -4,7 +4,8 @@ namespace Practiced_E_commerce.RepositoryInterface
 {
     public interface IProductRepoInterface
     {
-        Task<List<ProductListResponceDto>> GetAllProduct();
-        Task<ProductCreateDto> CreateProduct(ProductCreateDto productcreatedto);
+        Task<CreateProductResponseDto> Createproduct(CreateProductRequestDto createproductdto);
+        Task<Getall_productswithpagination_response_dto> GetAllProducts(Getall_productwithpagination_request_Dto getallproductdto);
+
     }
 }

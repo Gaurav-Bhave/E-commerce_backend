@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Practiced_E_commerce.Dto.Category;
 using Practiced_E_commerce.ServiceInterface;
 
 namespace Practiced_E_commerce.Controllers
@@ -21,6 +22,14 @@ namespace Practiced_E_commerce.Controllers
         public async Task<IActionResult> GetAllCategory()
         { 
             var result = await _catergoryservice.GetAllCategory();
+            return StatusCode(result.StatusCode, result);
+        }
+
+        [HttpPost("Createcategory")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Createcategory(CreatecategoryrequestDto createcategorydto)
+        { 
+            var result = await _catergoryservice.CreateCategory(createcategorydto);
             return StatusCode(result.StatusCode, result);
         }
     }
