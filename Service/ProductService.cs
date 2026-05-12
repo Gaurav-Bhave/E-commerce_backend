@@ -24,5 +24,68 @@ namespace Practiced_E_commerce.Service
                 Data = result
             };
         }
+
+
+        public async Task<ResponceModel> GetProducts(Getall_productwithpagination_request_Dto getalldto)
+        {
+            var result = await _productrepo.GetProducts(getalldto);
+
+            return new ResponceModel
+            { 
+                StatusCode = 200,
+                Message = "Product fetch successfully !" ,
+                Data = result
+            };
+        }
+
+        public async Task<ResponceModel> Getproductbyid(int id)
+        {
+            var result = await _productrepo.Getproductbyid(id);
+
+            return new ResponceModel
+            {
+                StatusCode =200,
+                Message = "Single product successfully !",
+                Data = result
+            };
+        }
+
+        public async Task<ResponceModel> Deleteproductbyid(int id)
+        {
+            var result = await _productrepo.Deleteproductbyid(id);
+
+            return new ResponceModel
+            { 
+                StatusCode=200,
+                Message = "product successfully deleted !",
+                Data  = result
+            };
+        }
+
+        public async Task<ResponceModel> Updateproduct(UpdateProductRequestDto updateproductdto)
+        {
+            var result = await _productrepo.Updateproduct(updateproductdto);
+
+            return new ResponceModel
+            {
+                StatusCode = 200,
+                Message = "product update sucessfully !",
+                Data = result
+            };
+        }
+
+
+        //summery for dashboard
+        public async Task<ResponceModel> Summery()
+        {
+            var result = await _productrepo.Summery();
+
+            return new ResponceModel
+            {
+                StatusCode = 200,
+                Message = "Fetched sucessfully Dashboard summery !",
+                Data= result
+            };
+        }
     }
 }
