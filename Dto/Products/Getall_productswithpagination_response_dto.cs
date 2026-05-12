@@ -2,18 +2,16 @@
 {
     public class Getall_productswithpagination_response_dto
     {
-        public int Productid { get; set; }
-        public string ProductName { get; set; }
-        public string ProductDescription { get; set; }
-        public int ProductPrice { get; set; }
-        public int Productcategoryid { get; set; }
-        public string Productcategoryname { get; set; }
-        public int Productbrandid { get; set; }
-        public string Productbrandname { get; set; }
-        public int Productstokequantity { get; set; }
-        public int Productstokekeepingunit { get; set; }
-        public bool Productisdeleted { get; set; }
-        public DateTime ProductCreatedAt { get; set; }
-        public List<string> ProdctImages { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public decimal Price { get; set; }
+        public bool IsDeleted { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public string CategoryName { get; set; } = string.Empty;
+        public string BrandName { get; set; } = string.Empty;
+        public List<string> ImageUrl { get; set; } = new List<string>();
+        public int TotalCount { get; set; }
+        
     }
 }

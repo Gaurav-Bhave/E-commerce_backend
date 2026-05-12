@@ -3,13 +3,18 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Practiced_E_commerce.Execption;
 using Practiced_E_commerce.Repository;
+using Practiced_E_commerce.Repository.Customer;
 using Practiced_E_commerce.RepositoryInterface;
+using Practiced_E_commerce.RepositoryInterface.Customer;
 using Practiced_E_commerce.Seeder;
 using Practiced_E_commerce.Service;
+using Practiced_E_commerce.Service.Customer;
 using Practiced_E_commerce.ServiceInterface;
+using Practiced_E_commerce.ServiceInterface.Customer;
 using Practiced_E_commerce.Token;
 using Serilog;
 
@@ -113,6 +118,15 @@ builder.Services.AddScoped<ICategoryServiceInterface, CategoryService>();
 builder.Services.AddScoped<IProductRepoInterface, ProductRepository>();
 builder.Services.AddScoped<IProductServiceInterface, ProductService>();
 
+builder.Services.AddScoped<IUsersRepoInterface, UsersRepositrory>();
+builder.Services.AddScoped<IUsersServiceInterface, UserService>();
+
+builder.Services.AddScoped<I_CProductRepointerface, C_ProductRepository>();
+builder.Services.AddScoped<I_CProductServiceInterface, C_ProductService>();
+
+builder.Services.AddScoped<I_CCartRepositoryInterface, C_CartRepository>();
+builder.Services.AddScoped<I_CCartServiceInterface, C_CartService>();
+
 // JWT service
 builder.Services.AddScoped<JwtService>();
 
@@ -137,9 +151,17 @@ if (app.Environment.IsDevelopment())
 // Global exception
 app.UseMiddleware<ExceptionMiddleware>();
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+
+//// Ya agar custom path hai:
+//app.UseStaticFiles(new StaticFileOptions
+//{
+//    FileProvider = new PhysicalFileProvider(
+//        Path.Combine(Directory.GetCurrentDirectory(), "images")),
+//    RequestPath = "/images"
+//});
 
 // 🟢 CORS middleware (VERY IMPORTANT POSITION)
 app.UseCors("AllowFrontend");
